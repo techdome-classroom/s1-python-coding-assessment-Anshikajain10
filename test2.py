@@ -1,4 +1,3 @@
-# program2.py
 
 def decode_message(s, p):
     m, n = len(s), len(p)
