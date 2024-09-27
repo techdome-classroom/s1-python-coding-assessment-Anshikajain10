@@ -1,19 +1,21 @@
-import unittest
-from program2 import decode_message
+# program2.py
 
-class TestDecoder(unittest.TestCase):
-    def test_case1(self):
-        self.assertEqual(decode_message("aa", "a"), False)
+def decode_message(s, p):
+    m, n = len(s), len(p)
 
-    def test_case2(self):
-        self.assertEqual(decode_message("aa", "*"), True)
+    dp = [[False] * (n + 1) for _ in range(m + 1)]
 
-    def test_case3(self):
-        self.assertEqual(decode_message("cb", "?a"), False)
+    dp[0][0] = True
 
-    def test_case4(self):
-        self.assertEqual(decode_message("abc", "?b?"), True)
+    for j in range(1, n + 1):
+        if p[j - 1] == '*':
+            dp[0][j] = dp[0][j - 1]
 
-if __name__ == '__main__':
-    unittest.main()
+    for i in range(1, m + 1):
+        for j in range(1, n + 1):
+            if p[j - 1] == s[i - 1] or p[j - 1] == '?':
+                dp[i][j] = dp[i - 1][j - 1] 
+            elif p[j - 1] == '*':
+                dp[i][j] = dp[i - 1][j] or dp[i][j - 1] 
 
+    return dp[m][n]
